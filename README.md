@@ -17,8 +17,8 @@
 
     ![1.jpg](screencaps/1.jpg)
 
-    Allow write access は、**サーバーから GitHub リポジトリに対し push** する必要がある場合にチェックする。  
-    今回は、**GitHub → サーバー への一方通行**なので、チェックを外している。
+    Allow write access は、**サーバから GitHub リポジトリに対し push** する必要がある場合にチェックする。  
+    今回は、**GitHub → サーバ への一方通行**なので、チェックを外している。
 1. Secrets登録。  
     Secrets and variables → Actions メニューから Secrets の登録画面を開く。
 
@@ -34,7 +34,7 @@
         <tbody>
             <tr>
                 <td>USERNAME</td>
-                <td>サーバーのSSHユーザ名</td>
+                <td>サーバのSSHユーザ名</td>
             </tr>
             <tr>
                 <td>HOST</td>
@@ -46,7 +46,7 @@
             </tr>
             <tr>
                 <td>SSH_PRIVATE_KEY</td>
-                <td>サーバーにSSH接続するための秘密鍵</td>
+                <td>サーバにSSH接続するための秘密鍵</td>
             </tr>
             <tr>
                 <td>DEPLOY_DIR</td>
