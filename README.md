@@ -13,7 +13,7 @@
     ```
 1. Deploy keys登録。  
     GitHubの Settings メニューから Deploy keys の登録画面を開く。  
-    Add deploy key ボタンを選択肢、Title に任意の名前、Key に先ほど作成したSSHキーペアの公開鍵を入力し、Add Key ボタンを選択し、Deploy keys を登録。
+    Add deploy key ボタンを選択し、Title に任意の名前、Key に先ほど作成したSSHキーペアの公開鍵を入力し、Add Key ボタンを選択し、Deploy keys を登録。
 
     ![1.jpg](screencaps/1.jpg)
 
@@ -130,7 +130,7 @@
     total 8
     -rw-rw-r-- 1 ec2-user ec2-user 14 Jun 27 17:16 hello.txt
     -rw-rw-r-- 1 ec2-user ec2-user 59 Jun 27 17:10 README.md
-    ``
+    ```
 
 ## エラー
 1. Buildエラーが発生。サーバにリポジトリをcloneする事で解決。
