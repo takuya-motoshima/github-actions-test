@@ -5,66 +5,61 @@
     - [エラー](#エラー)
 
 ## 手順
-1. デプロイサーバでSSHキーペアを作成。
+1. SSHキーペア作成。  
+    サーバで次のコマンドを実行して、SSHキーペア作成。
+
     ```sh
     ssh-keygen -t rsa -b 4096 -f id_rsa_github-actions-test
     ```
-1. 公開鍵をGitHubリポジトリの Deploy keys として登録。
-    Settings メニューから Deploy keys の登録画面を開く。  
-    「Add deploy key」 のボタンをクリックし、「Title」に任意の名前、「Key」に先ほど作成したSSHキーペアの公開鍵を入力し、「Add Key」 ボタンを押下して、Deploy keys を登録。
+1. Deploy keys登録。  
+    GitHubの Settings メニューから Deploy keys の登録画面を開く。  
+    Add deploy key ボタンを選択肢、Title に任意の名前、Key に先ほど作成したSSHキーペアの公開鍵を入力し、Add Key ボタンを選択し、Deploy keys を登録。
 
     ![1.jpg](screencaps/1.jpg)
 
-    「Allow write access」のチェックは、デプロイサーバーから GitHub リポジトリに対して push する必要がある場合にチェックを入れる。  
-    今回は、GitHub → デプロイサーバー への一方通行なので、チェックは外しておく。
-1. 必要な情報を Secrets に登録。  
+    Allow write access は、**サーバーから GitHub リポジトリに対し push** する必要がある場合にチェックする。  
+    今回は、**GitHub → サーバー への一方通行**なので、チェックを外している。
+1. Secrets登録。  
     Secrets and variables → Actions メニューから Secrets の登録画面を開く。
 
-    「New repository secret」ボタンを押下して、以下の内容を登録。
+    New repository secret ボタンを選択し、以下の内容を登録。
 
     <table width="100%">
         <thead>
             <tr>
-                <th>項目名</th>
-                <th>入力内容</th>
-                <th>例</th>
+                <th>項目</th>
+                <th>内容</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>USERNAME</td>
-                <td>デプロイサーバーのSSHユーザ名</td>
-                <td>ec2-user</td>
+                <td>サーバーのSSHユーザ名</td>
             </tr>
             <tr>
                 <td>HOST</td>
-                <td>デプロイサーバのホスト名</td>
-                <td>203.0.113.1</td>
+                <td>サーバのホスト名</td>
             </tr>
             <tr>
                 <td>PORT</td>
-                <td>デプロイサーバのSSHポート番号</td>
-                <td>22</td>
+                <td>サーバのSSHポート番号</td>
             </tr>
             <tr>
                 <td>SSH_PRIVATE_KEY</td>
-                <td>デプロイサーバーにSSH接続するための秘密鍵</td>
-                <td></td>
+                <td>サーバーにSSH接続するための秘密鍵</td>
             </tr>
             <tr>
                 <td>DEPLOY_DIR</td>
-                <td>デプロイ先のディレクトリ</td>
-                <td>/var/www/html/test</td>
-            </tr>
+                <td>デプロイ先ディレクトリ</td>
             </tr>
         </tbody>
     </table>
 
     ![2.jpg](screencaps/2.jpg)
 
-    ※ここで指定した値は、あとで作成する workflow ファイルで、${{ secrets.[登録したSecretsの名前] }} と記載すると呼び出せる。
-2. Workflow を作成。  
-    リポジトリ内の Actions メニューに移動し、「Simple workflow」の「Configure」のボタンを押下してWorkflow のベースを取得。
+    ※設定した値は、この後の手順で作成する Workflow ファイルで <code>${{ secrets.[登録したSecretsの名前] }}</code> と記述する事で呼び出せる。
+4. Workflow作成。  
+    リポジトリ内の Actions メニューに移動し、Simple workflow の Configure のボタンを押下してWorkflow の Base を取得。
 
     ![3.jpg](screencaps/3.jpg)
 
@@ -75,7 +70,7 @@
     ![4.jpg](screencaps/4.jpg)
 
     今回は、main ブランチに push された時にデプロイするよう、deploy.yml を以下内容で置き換える。  
-    置き換えたら、「Start Commit」ボタンを押下して、ファイルをリポジトリに保存。
+    置き換えたら、Start Commit ボタンを押下して、ファイルをリポジトリに保存。
 
     ```yml
     name: CI
@@ -103,7 +98,7 @@
                 git pull origin main
     ```
 
-    Workflow の解説：
+    Workflow解説：  
     - name: CI  
         Workflow の名前。デフォルトのまま使っているだけなので、任意のものに書き換えていない。
     - on:  
@@ -111,7 +106,7 @@
         今回は、main ブランチに push された時としている。
     - jobs:  
         実行する処理。
-    - rans-on:
+    - rans-on:  
         処理の実行環境。
     - uses:  
         今回利用しているアクション。
@@ -123,13 +118,13 @@
 
     ![5.jpg](screencaps/5.jpg)
 
-2. テスト
-    mainブランチに新規で「hello.txt」というファイルを作成し、デプロイサーバに反映されるか確認。
+6. テスト
+    mainブランチに新規で hello.txt というファイルを作成し、サーバに反映されるか確認。
 
     ![6.jpg](screencaps/6.jpg)
 
 
-    「hello.txt」が、自動でサーバにデプロイされている事を確認できた。
+    hello.txt が、自動でサーバにデプロイされている事を確認できた。
     ```sh
     $ ll
     total 8
@@ -138,10 +133,8 @@
     ``
 
 ## エラー
-1. Buildでエラーが発生。
+1. Buildエラーが発生。サーバにリポジトリをcloneする事で解決。
     ```sh
     err: fatal: not a git repository (or any of the parent directories): .git
     2023/06/27 08:05:10 Process exited with status 128
     ```
-
-    デプロイサーバの該当ディレクトリにリポジトリをcloneしたら解決した。
